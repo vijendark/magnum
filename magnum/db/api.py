@@ -115,6 +115,14 @@ class Connection(object):
         :returns: clusters, nodes count.
         """
 
+    def get_cluster_count_all(self, context, filters=None):
+        """Get count of matching clusters.
+
+        :param context: The security context
+        :param filters: Filters to apply. Defaults to None.
+        :returns: Count of matching clusters.
+        """
+
     @abc.abstractmethod
     def destroy_cluster(self, cluster_id):
         """Destroy a cluster and all associated interfaces.
