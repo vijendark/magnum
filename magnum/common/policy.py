@@ -96,6 +96,20 @@ def enforce(context, rule=None, target=None,
                             do_raise=do_raise, exc=exc, *args, **kwargs)
 
 
+def check_is_admin(context):
+    """Whether or not user is admin according to policy setting.
+
+    """
+    init()
+
+    # include project_id on target to avoid KeyError if context_is_admin
+    # policy definition is missing, and default admin_or_owner rule
+    # attempts to apply.
+    target = {'project_id': ''}
+    credentials = context.to_dict()
+    return _ENFORCER.enforce('context_is_admin', target, credentials)
+
+
 def enforce_wsgi(api_name, act=None):
     """This is a decorator to simplify wsgi action policy rule check.
 

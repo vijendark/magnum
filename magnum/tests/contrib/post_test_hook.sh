@@ -110,6 +110,9 @@ EOF
     echo_summary "Generate a key-pair"
     ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
     openstack keypair create --public-key ~/.ssh/id_rsa.pub default
+    # (TODO) for debugging gate issue and will be removed
+    openstack keypair list
+    openstack role assignment list --user $OS_USERNAME --names
 }
 
 function add_flavor {
