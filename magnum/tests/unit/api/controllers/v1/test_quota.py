@@ -102,6 +102,27 @@ class TestQuota(api_base.FunctionalTest):
 
     @mock.patch("magnum.common.policy.enforce")
     @mock.patch("magnum.common.context.make_context")
+    def test_get_all_with_pagination_limit(self, mock_context,
+                                           mock_policy):
+        mock_context.return_value = self.context
+        quota_list = []
+        for i in range(4):
+            quota = obj_utils.create_test_quota(self.context,
+                                                project_id="proj-id-"+str(i))
+            quota_list.append(quota)
+
+        self.context.is_admin = True
+        response = self.get_json('/quotas?limit=2&all_tenants=True')
+        self.assertEqual(2, len(response['quotas']))
+        expected = [r.project_id for r in quota_list[:2]]
+        res_proj_ids = [r['project_id'] for r in response['quotas']]
+        self.assertEqual(sorted(expected), sorted(res_proj_ids))
+        expected = ('http://localhost/v1/quotas?sort_key=id&sort_dir=asc&limit'
+                    '=2&marker=%s' % quota_list[1].id)
+        self.assertEqual(expected, response['next'])
+
+    @mock.patch("magnum.common.policy.enforce")
+    @mock.patch("magnum.common.context.make_context")
     def test_get_all_admin_all_with_pagination_marker(self, mock_context,
                                                       mock_policy):
         mock_context.return_value = self.context
