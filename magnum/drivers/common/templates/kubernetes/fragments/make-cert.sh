@@ -24,6 +24,11 @@ if [ "$TLS_DISABLED" == "True" ]; then
     exit 0
 fi
 
+VERIFY_CA_ARG="-k"
+if [ "$VERIFY_CA" == "True" ]; then
+    VERIFY_CA_ARG=""
+fi
+
 if [[ -z "${KUBE_NODE_PUBLIC_IP}" ]]; then
     KUBE_NODE_PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
 fi
@@ -85,11 +90,11 @@ EOF
 AUTH_URL=${AUTH_URL/v2.0/v3}
 content_type='Content-Type: application/json'
 url="$AUTH_URL/auth/tokens"
-USER_TOKEN=`curl -k -s -i -X POST -H "$content_type" -d "$auth_json" $url \
+USER_TOKEN=`curl "$VERIFY_CA_ARG" -s -i -X POST -H "$content_type" -d "$auth_json" $url \
     | grep X-Subject-Token | awk '{print $2}' | tr -d '[[:space:]]'`
 
 # Get CA certificate for this cluster
-curl -k -X GET \
+curl "$VERIFY_CA_ARG" -X GET \
     -H "X-Auth-Token: $USER_TOKEN" \
     -H "OpenStack-API-Version: container-infra latest" \
     $MAGNUM_URL/certificates/$CLUSTER_UUID | python -c 'import sys, json; print json.load(sys.stdin)["pem"]' > ${CA_CERT}
@@ -118,7 +123,7 @@ openssl req -new -days 1000 \
 
 # Send csr to Magnum to have it signed
 csr_req=$(python -c "import json; fp = open('${SERVER_CSR}'); print json.dumps({'cluster_uuid': '$CLUSTER_UUID', 'csr': fp.read()}); fp.close()")
-curl -k -X POST \
+curl "$VERIFY_CA_ARG" -X POST \
     -H "X-Auth-Token: $USER_TOKEN" \
     -H "OpenStack-API-Version: container-infra latest" \
     -H "Content-Type: application/json" \

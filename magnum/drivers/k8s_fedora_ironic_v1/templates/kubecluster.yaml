@@ -238,6 +238,11 @@ parameters:
     description: whether or not to disable TLS
     default: False
 
+  verify_ca:
+    type: boolean
+    description: whether or not to validate certificate authority
+    default: True
+
   kubernetes_port:
     type: number
     description: >
@@ -449,6 +454,7 @@ resources:
           tenant_name: {get_param: tenant_name}
           kubernetes_port: {get_param: kubernetes_port}
           tls_disabled: {get_param: tls_disabled}
+          verify_ca: {get_param: verify_ca}
           secgroup_base_id: {get_resource: secgroup_base}
           secgroup_kube_master_id: {get_resource: secgroup_kube_master}
           http_proxy: {get_param: http_proxy}
@@ -529,6 +535,7 @@ resources:
       password: {get_param: password}
       kubernetes_port: {get_param: kubernetes_port}
       tls_disabled: {get_param: tls_disabled}
+      verify_ca: {get_param: verify_ca}
       http_proxy: {get_param: http_proxy}
       https_proxy: {get_param: https_proxy}
       no_proxy: {get_param: no_proxy}

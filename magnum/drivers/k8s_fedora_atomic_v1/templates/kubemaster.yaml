@@ -91,6 +91,10 @@ parameters:
     type: boolean
     description: whether or not to enable TLS
 
+  verify_ca:
+    type: boolean
+    description: whether or not to validate certificate authority
+
   kubernetes_port:
     type: number
     description: >
@@ -274,6 +278,7 @@ resources:
             "$TENANT_NAME": {get_param: tenant_name}
             "$CLUSTER_SUBNET": {get_param: fixed_subnet}
             "$TLS_DISABLED": {get_param: tls_disabled}
+            "$VERIFY_CA": {get_param: verify_ca}
             "$CLUSTER_UUID": {get_param: cluster_uuid}
             "$MAGNUM_URL": {get_param: magnum_url}
             "$HTTP_PROXY": {get_param: http_proxy}
