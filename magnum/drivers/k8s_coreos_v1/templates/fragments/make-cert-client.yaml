@@ -40,6 +40,11 @@ write_files:
         exit 0
       fi
 
+      VERIFY_CA_ARG="-k"
+      if [ "$VERIFY_CA" == "True" ]; then
+          VERIFY_CA_ARG=""
+      fi
+
       cert_conf_dir=${KUBE_CERTS_PATH}/conf
 
       mkdir -p ${cert_conf_dir}
@@ -70,12 +75,12 @@ write_files:
 
       #trust is introduced in Keystone v3 version
       AUTH_URL=${AUTH_URL/v2.0/v3}
-      USER_TOKEN=`curl -k -s -i -X POST -H "Content-Type: application/json" -d @auth.json \
+      USER_TOKEN=`curl "$VERIFY_CA_ARG" -s -i -X POST -H "Content-Type: application/json" -d @auth.json \
                        $AUTH_URL/auth/tokens | grep X-Subject-Token | awk '{print $2}' | tr -d '\r'`
 
       rm -rf auth.json
 
-      ca_cert_json=$(curl -k -X GET \
+      ca_cert_json=$(curl "$VERIFY_CA_ARG" -X GET \
         -H "X-Auth-Token: $USER_TOKEN" \
         -H "OpenStack-API-Version: container-infra latest" \
         $MAGNUM_URL/certificates/$CLUSTER_UUID)
@@ -112,7 +117,7 @@ write_files:
       csr=$(cat $CLIENT_CSR | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/\\n/g')
       csr_req="{\"cluster_uuid\": \"$CLUSTER_UUID\", \"csr\": \"$csr\"}"
       # Send csr to Magnum to have it signed
-      client_cert_json=$(curl -k -X POST \
+      client_cert_json=$(curl "$VERIFY_CA_ARG" -X POST \
           -H "X-Auth-Token: $USER_TOKEN" \
           -H "OpenStack-API-Version: container-infra latest" \
           -H "Content-Type: application/json" \

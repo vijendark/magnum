@@ -107,6 +107,10 @@ parameters:
     type: boolean
     description: whether or not to enable TLS
 
+  verify_ca:
+    type: boolean
+    description: whether or not to validate certificate authority
+
   kubernetes_port:
     type: number
     description: >
@@ -242,6 +246,7 @@ resources:
             "$NETWORK_DRIVER": {get_param: network_driver}
             "$KUBE_API_PORT": {get_param: kubernetes_port}
             "$TLS_DISABLED": {get_param: tls_disabled}
+            "$VERIFY_CA": {get_param: verify_ca}
             "$KUBE_VERSION": {get_param: kube_version}
             "$CLUSTER_UUID": {get_param: cluster_uuid}
             "$MAGNUM_URL": {get_param: magnum_url}
