@@ -6,6 +6,11 @@ if [ -z "$NO_PROXY" ]; then
     NO_PROXY=$SWARM_API_IP,$ETCD_SERVER_IP,$SWARM_NODE_IP
 fi
 
+VERIFY_CA_ARG="-k"
+if [ "$VERIFY_CA" == "True" ]; then
+    VERIFY_CA_ARG=""
+fi
+
 cat > /etc/systemd/system/swarm-manager.service << END_SERVICE_TOP
 [Unit]
 Description=Swarm Manager
@@ -50,7 +55,7 @@ cat >> /etc/systemd/system/swarm-manager.service << END_SERVICE_BOTTOM
                                   etcd://$ETCD_SERVER_IP:2379/v2/keys/swarm/
 ExecStop=/usr/bin/docker stop swarm-manager
 Restart=always
-ExecStartPost=/usr/bin/curl -k -i -X POST -H 'Content-Type: application/json' -H 'X-Auth-Token: $WAIT_HANDLE_TOKEN' \\
+ExecStartPost=/usr/bin/curl "$VERIFY_CA_ARG" -i -X POST -H 'Content-Type: application/json' -H 'X-Auth-Token: $WAIT_HANDLE_TOKEN' \\
     --data-binary "'"'{"Status": "SUCCESS", "Reason": "Setup complete", "Data": "OK", "Id": "$UUID"}'"'" \\
     "$WAIT_HANDLE_ENDPOINT"
 
