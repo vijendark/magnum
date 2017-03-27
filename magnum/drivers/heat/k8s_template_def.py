@@ -71,6 +71,8 @@ class K8sTemplateDefinition(template_def.BaseTemplateDefinition):
         self.add_parameter('tls_disabled',
                            cluster_template_attr='tls_disabled',
                            required=True)
+        self.add_parameter('verify_ca',
+                           cluster_template_attr='verify_ca')
         self.add_parameter('registry_enabled',
                            cluster_template_attr='registry_enabled')
         self.add_parameter('cluster_uuid',

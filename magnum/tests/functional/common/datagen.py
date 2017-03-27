@@ -105,6 +105,7 @@ def baymodel_data(**kwargs):
         "name": data_utils.rand_name('bay'),
         "coe": "swarm",
         "tls_disabled": False,
+        "verify_ca": True,
         "network_driver": None,
         "volume_driver": None,
         "labels": {},
@@ -223,7 +224,7 @@ def valid_swarm_baymodel(is_public=False):
                          external_network_id=config.Config.nic_id,
                          http_proxy=None, https_proxy=None, no_proxy=None,
                          network_driver=None, volume_driver=None, labels={},
-                         tls_disabled=False)
+                         tls_disabled=False, verify_ca=True)
 
 
 def bay_data(name=data_utils.rand_name('bay'),
@@ -345,6 +346,7 @@ def cluster_template_data(**kwargs):
         "name": data_utils.rand_name('cluster'),
         "coe": "swarm",
         "tls_disabled": False,
+        "verify_ca": True,
         "network_driver": None,
         "volume_driver": None,
         "labels": {},

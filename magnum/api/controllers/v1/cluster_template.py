@@ -118,6 +118,9 @@ class ClusterTemplate(base.APIBase):
     tls_disabled = wsme.wsattr(types.boolean, default=False)
     """Indicates whether the TLS should be disabled"""
 
+    verify_ca = wsme.wsattr(types.boolean, default=True)
+    """Indicates whether certificate authority should be validated or not"""
+
     public = wsme.wsattr(types.boolean, default=False)
     """Indicates whether the ClusterTemplate is public or not."""
 

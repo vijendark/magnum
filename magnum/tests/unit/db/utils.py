@@ -50,6 +50,7 @@ def get_test_cluster_template(**kw):
         'no_proxy': kw.get('no_proxy', 'fake_no_proxy'),
         'registry_enabled': kw.get('registry_enabled', False),
         'tls_disabled': kw.get('tls_disabled', False),
+        'verify_ca': kw.get('verify_ca', True),
         'public': kw.get('public', False),
         'server_type': kw.get('server_type', 'vm'),
         'insecure_registry': kw.get('insecure_registry', '10.0.0.1:5000'),

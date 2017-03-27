@@ -178,6 +178,7 @@ class ClusterTemplate(Base):
     registry_enabled = Column(Boolean, default=False)
     labels = Column(JSONEncodedDict)
     tls_disabled = Column(Boolean, default=False)
+    verify_ca = Column(Boolean, default=True)
     public = Column(Boolean, default=False)
     server_type = Column(String(255))
     insecure_registry = Column(String(255))

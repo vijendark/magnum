@@ -85,7 +85,8 @@ def create_test_cluster(context, **kw):
     cluster = get_test_cluster(context, **kw)
     create_test_cluster_template(context, uuid=cluster['cluster_template_id'],
                                  coe=kw.get('coe', 'swarm'),
-                                 tls_disabled=kw.get('tls_disabled'))
+                                 tls_disabled=kw.get('tls_disabled'),
+                                 verify_ca=kw.get('verify_ca', True))
     cluster.create()
     return cluster
 

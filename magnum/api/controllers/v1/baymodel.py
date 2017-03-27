@@ -117,6 +117,9 @@ class BayModel(base.APIBase):
     tls_disabled = wsme.wsattr(types.boolean, default=False)
     """Indicates whether TLS should be disabled"""
 
+    verify_ca = wsme.wsattr(types.boolean, default=True)
+    """Indicates whether certificate authority should be validated or not"""
+
     public = wsme.wsattr(types.boolean, default=False)
     """Indicates whether the Baymodel is public or not."""
 
@@ -199,8 +202,8 @@ class BayModel(base.APIBase):
 class BayModelPatchType(types.JsonPatchType):
     _api_base = BayModel
     _extra_non_removable_attrs = {'/network_driver', '/external_network_id',
-                                  '/tls_disabled', '/public', '/server_type',
-                                  '/coe', '/registry_enabled',
+                                  '/tls_disabled', 'verify_ca', '/public',
+                                  '/server_type', '/coe', '/registry_enabled',
                                   '/cluster_distro'}
 
 
